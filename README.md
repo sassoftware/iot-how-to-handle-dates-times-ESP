@@ -46,7 +46,7 @@ Below is a snapshot of the model used for illustration:
 </p>
 
 You can find the model for reference here:
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeDataTypes.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeDataTypes.xml
 
 Below is the snapshot of an event in Studio which shows Date type field and Stamp type field with formatting and their corresponding Int64 values.
 <p align="center">
@@ -103,7 +103,7 @@ Below is a snapshot of the model used for illustration:
 </p>
 
 You can find the model for reference here:
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeExpression.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeExpression.xml
 
 Below we have the output from the Source window to show what data is going to the Expression Engine for calculations.
 <p align="center">
@@ -157,7 +157,7 @@ Below is the snapshot of the model used for this illustration:
   <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
 </p>
 You can find the model for reference here:
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeDS2.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeDS2.xml
 
 Below we have the output from the Source window to show what data is going through the MAS engine to DS2 code:
 <p align="center">
@@ -229,7 +229,7 @@ Below is the snapshot of the model used for illustration:
   <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
 </p>
 You can find the model for reference here:  
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeFunctional.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeFunctional.xml
 
 The output from the Source window is below.
 <p align="center">
@@ -278,7 +278,7 @@ Below is the snapshot of the model used for illustration:
   <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
 </p>
 You can find the model for reference here:
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeParse.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeParse.xml
 
 Below we see the output from the Source window of the above model
 <p align="center">
@@ -366,7 +366,7 @@ Below you can find the model used for this illustration.
   <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
 </p>
 You can find the model for reference here:
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeString.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeString.xml
 
 First the output from Source window.
 <p align="center">
@@ -426,7 +426,7 @@ Below you can find the model used for this illustration.
   <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
 </p>
 You can find the model for reference here:
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_ConnectorTime.xml
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_ConnectorTime.xml
 
 The output from the Source window is as follows:
 <p align="center">
@@ -477,8 +477,8 @@ For reference the configuration of the Subscriber connector is as below:
 ## Time and time zone considerations
 In ESP all date and time data are converted to Coordinated Universal Time (UTC), no matter how time-stamped by its source. This you can easily notice by printing the current timestamp in a Functional Window.  
 You can get the models used here for your reference at:  
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_CurrentTime.xml  
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_CurrentTimeString.xml  
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_CurrentTime.xml  
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_CurrentTimeString.xml  
 
 The output from a Functional window printing the current time in microseconds is as below:
 <p align="center">
@@ -529,8 +529,8 @@ Below is the model to show the above behavior.
 </p>
 You can get the corresponding models here:
 
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeExpFunc.xml  
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeExpFuncGMT.xml  
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeExpFunc.xml  
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeExpFuncGMT.xml  
 
 
 The output from the Compute window when a Date is added through the expression is as below:
@@ -577,7 +577,7 @@ The model used here for illustration is as below:
 </p>
 
 You can get the corresponding model for illustration here:  
-https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeDiff.xml    
+https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeDiff.xml    
  
 The output from Source Window is as below:
 <p align="center">
