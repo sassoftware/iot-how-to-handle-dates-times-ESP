@@ -15,6 +15,27 @@ The tutorial talks about various ways of working with dates and times in ESP
     - [Micro Analytic Service (MAS)](#micro-analytic-service-mas)
         - [Model and Output](#model-and-output-2)
         - [Points to Consider](#points-to-consider-2)
+*	[Functional window handling time](#functional-window-handling-time)
+    - [Out of box conversion from Stamp and Date data type to Int64 type and vice versa](#out-of-box-conversion-from-stamp-and-date-data-type-to-int64-type-and-vice-versa)
+      -	[Model and Output](#model-and-output-3)
+    - [Conversion of date time string to date stamp types](#conversion-of-date-time-string-to-date-stamp-types)
+      - [Model and output](#model-and-output-4)
+      - [Points to Consider](#points-to-consider-3)
+    - [Conversion of date stamp type to date time string](#conversion-of-date-stamp-type-to-date-time-string)
+      - [Model and output](#model-and-output-5)
+      - [Points to Consider](#points-to-consider-4)
+*	[Date time handling in connectors and adapters](#date-time-handling-in-connectors-and-adapters)
+    - [Model and output](#model-and-output-6)
+*	[Time and time zone considerations](#time-and-time-zone-considerations)
+    - [timeGmtToLocal(time)](#timegmttolocaltime)
+    - [timeGmtString(argument1, argument2)](#timegmtstringargument1-argument2)
+    - [Points to Consider](#points-to-consider-5)
+      - [Model and output](#model-and-output-7)
+* [Calculations Involving Dates](#calculations-involving-dates)
+    - [Model and output](#model-and-output-8)
+*	[Best Practices](#best-practices)
+*	[Conclusion](#conclusion)
+
 
 ## Overview
 SAS Event Stream Processing provides multiple ways to work with dates and times.  Based on how the overall data stream is structured, ESP uses different internal languages and engines to handle the dates and times accordingly.
