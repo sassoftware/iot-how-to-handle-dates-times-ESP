@@ -1,0 +1,73 @@
+<project name="Project_ConnectorTime" pubsub="auto" threads="1" heartbeat-interval="1">
+  <description><![CDATA[The project  helps in understanding how connectors can parse date and time fields to convert input date and time data into ESP Date and Stamp types.]]></description>
+  <metadata>
+    <meta id="layout">{"cq1":{"Functional":{"x":65,"y":25},"Source":{"x":65,"y":-100}}}</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611817844221</meta>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1610677153476</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="cq1" trace="computeWindow">
+      <description><![CDATA[This specifies the continuous query container that holds
+      a collection of windows and enables one to specify the
+      connectivity between windows. One can turn on tracing
+      for a list of window and specifies the index type for
+      windows in the query.]]></description>
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timestr" type="string"/>
+              <field name="timedate" type="date"/>
+              <field name="timemicro" type="stamp"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector class="fs" name="PublisherConnector">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="dateformat"><![CDATA[%m/%d/%Y %H:%M:%S]]></property>
+                <property name="fsname"><![CDATA[/data/input_timeconnector.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+            <connector class="fs" name="SubscriberConnector">
+              <properties>
+                <property name="type"><![CDATA[sub]]></property>
+                <property name="dateformat"><![CDATA[%m/%d/%Y %H:%M:%S]]></property>
+                <property name="header"><![CDATA[full]]></property>
+                <property name="snapshot"><![CDATA[false]]></property>
+                <property name="fsname"><![CDATA[/data/output_timeconnector.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-functional name="Functional">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timestr" type="stamp"/>
+              <field name="timedate" type="date"/>
+              <field name="timemicro" type="stamp"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="timestr"><![CDATA[timeParse($timestr,'%m/%d/%Y %H:%M:%S')]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+      </windows>
+      <edges>
+        <description>
+       This fully specifies the continuous query with window
+       connectivity, which is a directed graph.
+      </description>
+        <edge source="Source" target="Functional"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>

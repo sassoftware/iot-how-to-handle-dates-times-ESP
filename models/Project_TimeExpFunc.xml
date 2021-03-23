@@ -1,0 +1,61 @@
+<project name="Project_TimeExpFunc" threads="1" pubsub="auto" heartbeat-interval="1">
+  <description><![CDATA[This project shows how Expression engine shows time zone with today() function.]]></description>
+  <metadata>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1611560507749</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611885987040</meta>
+    <meta id="layout">{"cq1":{"Compute":{"x":-120,"y":-65},"Functional":{"x":-120,"y":45},"Source":{"x":-120,"y":-175}}}</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="cq1">
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector class="fs" name="New_Connector_1">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="fsname"><![CDATA[/data/input_timedatatypes.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-compute name="Compute">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="date" type="date"/>
+            </fields>
+          </schema>
+          <output>
+            <field-expr><![CDATA[TODAY()]]></field-expr>
+          </output>
+        </window-compute>
+        <window-functional pubsub="true" name="Functional">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="date" type="date"/>
+              <field name="datefunc" type="date"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="datefunc"><![CDATA[timeCurrent()]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+      </windows>
+      <edges>
+        <edge source="Source" target="Compute"/>
+        <edge source="Compute" target="Functional"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>

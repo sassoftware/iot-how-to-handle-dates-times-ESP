@@ -1,0 +1,50 @@
+<project name="Project_CurrentTime" threads="1" pubsub="auto" heartbeat-interval="1">
+  <description><![CDATA[This project demonstrates how time zones can be worked with in ESP.]]></description>
+  <metadata>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1611301495020</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611818220303</meta>
+    <meta id="layout">{"cq1":{"Functional":{"x":-70,"y":10},"Source":{"x":-75,"y":-125}}}</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="cq1">
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector name="New_Connector_1" class="fs">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="fsname"><![CDATA[/data/input_timedatatypes.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-functional name="Functional">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="currentTime" type="date"/>
+              <field name="currentLocalTime" type="date"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="currentTime"><![CDATA[timeCurrent()]]></function>
+              <function name="currentLocalTime"><![CDATA[timeGmtToLocal(timeCurrent())]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+      </windows>
+      <edges>
+        <edge source="Source" target="Functional"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>

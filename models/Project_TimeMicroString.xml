@@ -1,0 +1,56 @@
+<project name="Project_TimeMicroString" pubsub="auto" threads="1" heartbeat-interval="1">
+  <description><![CDATA[The project shows how you can extract the microseconds part form a stamp type for a date formatted value.]]></description>
+  <metadata>
+    <meta id="layout">{"cq1":{"Functional1":{"x":70,"y":30},"Source":{"x":65,"y":-100}}}</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611887289338</meta>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1611293844821</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="cq1" trace="computeWindow">
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timenumber" type="stamp"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector name="New_Connector_1" class="fs">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="fsname"><![CDATA[/data/input_timenumber.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-functional pubsub="true" name="Functional1">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timenumber" type="stamp"/>
+              <field name="timedatestr" type="string"/>
+              <field name="timedatemicrostr" type="string"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="timedatestr"><![CDATA[timeString(quotient($timenumber,1000000),'%m/%d/%Y %H:%M:%S')]]></function>
+              <function name="timedatemicrostr"><![CDATA[concat(timeString(quotient($timenumber,1000000),'%m/%d/%Y %H:%M:%S'),'.',substring($timenumber,diff(stringLength($timenumber),6)))]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+      </windows>
+      <edges>
+        <description>
+       This fully specifies the continuous query with window
+       connectivity, which is a directed graph.
+      </description>
+        <edge source="Source" target="Functional1"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>

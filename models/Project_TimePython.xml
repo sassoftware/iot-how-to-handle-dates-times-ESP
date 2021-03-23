@@ -1,0 +1,85 @@
+<project name="Project_TimePython" pubsub="auto" threads="1" heartbeat-interval="1">
+  <description><![CDATA[The project shows how date and stamp data types are passed to Python code through MAS module.]]></description>
+  <metadata>
+    <meta id="layout">{"cq1":{"Calculate":{"x":65,"y":20},"Functional":{"x":70,"y":140},"Source":{"x":65,"y":-100}}}</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611888183127</meta>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1610606090512</meta>
+  </metadata>
+  <mas-modules>
+    <mas-module module="New_Module_1" language="python" func-names="getResultSet">
+      <code><![CDATA[from datetime import datetime
+import datetime
+
+def getResultSet(timefield):
+	"Output: timedata, timemicro"
+	timedata = timefield
+	timemicro = timefield
+	return timedata,timemicro]]></code>
+    </mas-module>
+  </mas-modules>
+  <contqueries>
+    <contquery name="cq1" trace="computeWindow">
+      <description><![CDATA[This specifies the continuous query container that holds
+      a collection of windows and enables one to specify the
+      connectivity between windows. One can turn on tracing
+      for a list of window and specifies the index type for
+      windows in the query.]]></description>
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timestr" type="string"/>
+              <field name="timefield" type="stamp"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector class="fs" name="New_Connector_1">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="dateformat"><![CDATA[%m/%d/%Y %H:%M:%S]]></property>
+                <property name="fsname"><![CDATA[/data/input_time.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-calculate pubsub="true" name="Calculate" algorithm="MAS">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timestr" type="string"/>
+              <field name="timefield" type="stamp"/>
+              <field name="timedata" type="int64"/>
+              <field name="timemicro" type="stamp"/>
+            </fields>
+          </schema>
+          <mas-map>
+            <window-map module="New_Module_1" function="getResultSet" revision="0" source="Source"/>
+          </mas-map>
+        </window-calculate>
+        <window-functional pubsub="true" name="Functional">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timestr" type="string"/>
+              <field name="timefield" type="stamp"/>
+              <field name="timedata" type="stamp"/>
+              <field name="timemicro" type="stamp"/>
+            </fields>
+          </schema>
+        </window-functional>
+      </windows>
+      <edges>
+        <description>
+       This fully specifies the continuous query with window
+       connectivity, which is a directed graph.
+      </description>
+        <edge source="Source" target="Calculate" role="data"/>
+        <edge source="Calculate" target="Functional"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>

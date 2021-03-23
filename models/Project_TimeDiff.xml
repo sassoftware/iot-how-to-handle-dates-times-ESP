@@ -1,0 +1,97 @@
+<project name="Project_TimeDiff" threads="1" pubsub="auto" heartbeat-interval="1">
+  <description><![CDATA[The project illustrates how time processing is handled in the different underlying engines and languages in ESP.]]></description>
+  <metadata>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1611320079187</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611819605314</meta>
+    <meta id="layout">{"cq1":{"Calculate":{"x":140,"y":-40},"Compute":{"x":-85,"y":-40},"Functional":{"x":-325,"y":-50},"Source":{"x":-85,"y":-185}}}</meta>
+  </metadata>
+  <mas-modules>
+    <mas-module module="New_Module_1" language="ds2" func-names="getResultSet">
+      <code><![CDATA[ds2_options sas;
+
+	package loadResults/overwrite=yes;
+
+method getResultSet(bigint date1, bigint date2, in_out bigint diff);
+	diff = date2-date1;
+end;
+endpackage;]]></code>
+    </mas-module>
+  </mas-modules>
+  <contqueries>
+    <contquery name="cq1">
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="date1" type="stamp"/>
+              <field name="date2" type="stamp"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector class="fs" name="New_Connector_1">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="dateformat"><![CDATA[%m/%d/%Y %H:%M:%S]]></property>
+                <property name="fsname"><![CDATA[/data/input_timefunctionaldiff.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-functional name="Functional">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="date1" type="stamp"/>
+              <field name="date2" type="stamp"/>
+              <field name="diff" type="int64"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="diff"><![CDATA[diff(date2,date1)]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+        <window-compute name="Compute">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="date1" type="stamp"/>
+              <field name="date2" type="stamp"/>
+              <field name="diff" type="int64"/>
+              <field name="diffDate" type="double"/>
+            </fields>
+          </schema>
+          <output>
+            <field-expr><![CDATA[date1]]></field-expr>
+            <field-expr><![CDATA[date2]]></field-expr>
+            <field-expr><![CDATA[(date2 - date1)*(86400000000)]]></field-expr>
+            <field-expr><![CDATA[date2-date1]]></field-expr>
+          </output>
+        </window-compute>
+        <window-calculate name="Calculate" algorithm="MAS">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="date1" type="stamp"/>
+              <field name="date2" type="stamp"/>
+              <field name="diff" type="int64"/>
+            </fields>
+          </schema>
+          <mas-map>
+            <window-map module="New_Module_1" function="getResultSet" revision="0" source="Source"/>
+          </mas-map>
+        </window-calculate>
+      </windows>
+      <edges>
+        <edge source="Source" target="Functional"/>
+        <edge source="Source" target="Compute"/>
+        <edge source="Source" target="Calculate" role="data"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>

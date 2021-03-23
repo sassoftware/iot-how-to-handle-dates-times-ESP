@@ -1,0 +1,63 @@
+<project name="Project_TimeDataTypes" pubsub="auto" threads="1" heartbeat-interval="1">
+  <description><![CDATA[The project shows how Date and Stamp types are handled internally in ESP.]]></description>
+  <metadata>
+    <meta id="layout">{"cq1":{"Functional1":{"x":65,"y":-20},"Source":{"x":65,"y":-155}}}</meta>
+    <meta id="studioModifiedBy">anonymousUser</meta>
+    <meta id="studioModified">1611818740173</meta>
+    <meta id="studioUploadedBy">anonymousUser</meta>
+    <meta id="studioUploaded">1610416277071</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="cq1" trace="computeWindow">
+      <description><![CDATA[This specifies the continuous query container that holds
+      a collection of windows and enables one to specify the
+      connectivity between windows. One can turn on tracing
+      for a list of window and specifies the index type for
+      windows in the query.]]></description>
+      <windows>
+        <window-source pubsub="true" name="Source">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector name="New_Connector_1" class="fs">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="fsname"><![CDATA[/data/input_timedatatypes.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-functional pubsub="true" name="Functional1">
+          <schema>
+            <fields>
+              <field name="id" type="int64" key="true"/>
+              <field name="timedate" type="date"/>
+              <field name="timedatenum" type="int64"/>
+              <field name="timedatemicro" type="stamp"/>
+              <field name="timedatemicronum" type="int64"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="timedate"><![CDATA[timeCurrent()]]></function>
+              <function name="timedatemicro"><![CDATA[systemMicro()]]></function>
+              <function name="timedatenum"><![CDATA[$timedate]]></function>
+              <function name="timedatemicronum"><![CDATA[$timedatemicro]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+      </windows>
+      <edges>
+        <description>
+       This fully specifies the continuous query with window
+       connectivity, which is a directed graph.
+      </description>
+        <edge source="Source" target="Functional1"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>
