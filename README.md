@@ -37,6 +37,9 @@ The tutorial talks about various ways of working with dates and times in ESP
 *	[Conclusion](#conclusion)
 
 
+
+
+
 ## Overview
 SAS Event Stream Processing provides multiple ways to work with dates and times.  Based on how the overall data stream is structured, ESP uses different internal languages and engines to handle the dates and times accordingly.
 
@@ -61,19 +64,19 @@ Note: SAS Event Stream Processing saves all time values relative to the UNIX epo
 
 ### Model and Output
 Below is a snapshot of the model used for illustration:
-<p align="center">
+<figure align="center">
   <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+  <figcaption><i>Fig 1. Model for Date and Time data types</i></figcaption>
+</figure>
 
 You can find the model for reference here:
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeDataTypes.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeDataTypes.xml
 
 Below is the snapshot of an event in Studio which shows Date type field and Stamp type field with formatting and their corresponding Int64 values.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/2_2.jpg">
+  <figcaption><i>Fig 2. Output for date time data type handling in ESP</i></figcaption>
+</figure>
 
 - **timedate** is my current time as a Date field.
 - **timedatenum** is the value of timedate field stored in ESP.
@@ -86,10 +89,10 @@ Note: You can know more about how to publish events into ESP with date formattin
 ### Points to Consider
 One of the common mistakes done when working with date time types is not assigning the correct data to the underlying data types. If you assign anything other than microseconds to the Stamp data type, then your corresponding date will be wrong.
 Below is the snapshot of date shown by ESP Studio when value of Date type is assigned to Stamp type.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/2_3.jpg">
+  <figcaption><i>Fig 3. Output for Date type value assigned to Stamp type</i></figcaption>
+</figure>
 
 - **timedate** is the current time as a Date field.
 - **timedatenum** is the value of timedate field stored in ESP.
@@ -118,28 +121,28 @@ SAS Event Stream Processing converts between the UNIX epoch format and the expre
 
 #### Model and Output
 Below is a snapshot of the model used for illustration:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img width="200" height="200" src="models/snapshots/3_1.jpg">
+  <figcaption><i>Fig 4. Model for Date and Stamp type handling in Expression engine</i></figcaption>
+</figure>
 
 You can find the model for reference here:
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeExpression.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeExpression.xml
 
 Below we have the output from the Source window to show what data is going to the Expression Engine for calculations.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/3_2.jpg">
+  <figcaption><i>Fig 5. Output from Source window</i></figcaption>
+</figure>
 
 - **timefield** is a string representation of date and time.
 - **time** is the value of timefield formatted to Stamp data type 
 
 Below is the output that we get from the Compute Window when the date is 01/01/2021 01:00:00.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/3_3.jpg">
+  <figcaption><i>Fig 6. Output from expression engine for given date</i></figcaption>
+</figure>
 
 - **timefield** is a string representation of  a given date and time.
 - **timedate** is the timefield converted automatically by the expression engine into Stamp data type
@@ -149,20 +152,10 @@ Below is the output that we get from the Compute Window when the date is 01/01/2
 `toreal` converts the internal date time type of Expression Engine to double type to show how the time data is handled in expression engine
 
 #### Points to Consider
-One of the common mistakes done when working with date time types is not assigning the correct data to the underlying data types. If you assign anything other than microseconds to the Stamp data type, then your corresponding date will be wrong.  
-Below is the snapshot of date shown by ESP Studio when value of Date type is assigned to Stamp type.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
-
-- **timedate** is the current time as a Date field.
-- **timedatenum** is the value of timedate field stored in ESP.
-- **timedatemicro** is the current time as Stamp field
-- **timedatemicronum** is the value of timedatemicro field stored in ESP.
-
-Notice that timedatemicronum has same value as timedatenum field. However, notice the value is timedatemicro field. The year is different from timedate field. This is because timedatemicro field expects value in microseconds and converts that into date time format. So, 1611124589 microseconds since epoch is 1970-01-01T00:26:51.124589Z.  
-You can face a similar issue when you assign Stamp type data to Date type.
+The Date time value that you get after processing by Expression engine may not be exactly same as expected, specially the time part.  
+If you notice in the model above, the value of timedate field, it has 29 microseconds more. You may be guessing from where this came. Let’s looks at the calculation that the conversion between ESP and Expression Engine.
+01/01/2021 is 44197 days since 12/30/1899.  
+Now we need to convert the hour part. So, 01 will be 1/24 days which comes out to be 0.041666666666666………. This is rounded off to 0.041666667. The 29 microsecond is because of the rounding off that is done on converting the fraction back to microsecond. In this case 0.041667 is days in fraction. If we convert it into microseconds, then we will multiply it with 24*3600000000 which comes out to be 3,600,000,028.8 microseconds.
 
 ## Micro Analytic Service (MAS)
 When you use SAS Micro Analytic Service modules with DS2 or Python, the date or time value is not converted into native formats. Instead, the value is converted into SAS epoch format, which starts at January 1, 1960. The value is passed as a BIGINT for DS2 and a long for Python.
@@ -173,27 +166,27 @@ Note: If the ESP dates are written to CAS then also this difference in epochs mu
 
 ### Model and Output
 Below is the snapshot of the model used for this illustration:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/3_4.jpg">
+  <figcaption><i>Fig 7. Model to illustrate Date and Time handling through MAS in DS2</i></figcaption>
+</figure>
 You can find the model for reference here:
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeDS2.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeDS2.xml
 
 Below we have the output from the Source window to show what data is going through the MAS engine to DS2 code:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/3_5.jpg">
+  <figcaption><i>Fig 8. Output from Source Window</i></figcaption>
+</figure>
 
 - **timestr** is a string representation of date and time.
 - **timefield** is the value of timestr formatted to Stamp data type 
 
 Below is the corresponding output from the Calculate window.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/3_6.jpg">
+  <figcaption><i>Fig 9. Output from Calculate window by the DS2 code</i></figcaption>
+</figure>
 
 - **timestr** is a string representation of date and time.
 - **timefield** is the value of timestr formatted to Stamp data type 
@@ -214,10 +207,10 @@ You can see the code simply assigns the stamp values passed to two fields, timed
 
 ### Points to consider
 If we convert the timedata field above into Stamp data type in a Functional Window then let’s see the output.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/3_7.jpg">
+  <figcaption><i>Fig 10. Output of Calculate window passed through the following Functional Window </i></figcaption>
+</figure>
 
 - **timedata** is of Stamp type which represents the underlying value that the DS2 code gets for the stamp type.
 
@@ -245,36 +238,36 @@ Functional window can automatically convert Date and Stamp types to their underl
 
 #### Model and Output
 Below is the snapshot of the model used for illustration:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_1.jpg">
+  <figcaption><i>Fig 11. Model for showing how Functional Window handles Date and Stamp data types </i></figcaption>
+</figure>
 You can find the model for reference here:  
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeFunctional.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeFunctional.xml
 
 The output from the Source window is below.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_2.jpg">
+  <figcaption><i>Fig 12. Output from Source window</i></figcaption>
+</figure>
 
 - **timeseconds** is number of seconds since epoch as integer
 - **timemicro** is number of microseconds since epoch as integer
 
 The output from the Functional window getting the above input is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_3.jpg">
+  <figcaption><i>Fig 13. Output from Functional window getting converting INT64 types to Date and Stamp types</i></figcaption>
+</figure>
 
 - **timeseconds** is of Date type for the timeseconds field of Source window
 - **timemicro** is of Stamp type for the timemicro field of Source window
 
 If we pass the same data to another Functional Window with Int64 type data then the output is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_4.jpg">
+  <figcaption><i>Fig 14. Output from Functional1 window that convert Date and Stamp types to Int64 types</i></figcaption>
+</figure>
 
 - **timeseconds** is Int64 type for the timeseconds field from Functional window
 - **timemicro** is Int64 type for the timemicro field from Functional window
@@ -294,26 +287,26 @@ Note: The function ignores any milli or microseconds part of the data.
 
 #### Model and Output
 Below is the snapshot of the model used for illustration:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_5.jpg">
+  <figcaption><i>Fig 15. Model for showing conversion of date time string into Date and Stamp type</i></figcaption>
+</figure>
 You can find the model for reference here:
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeParse.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeParse.xml
 
 Below we see the output from the Source window of the above model
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_6.jpg">
+  <figcaption><i>Fig 16. Output from Source window</i></figcaption>
+</figure>
 
 - **timestr** is the date time in string type
 
 The output from the Functional window getting the above input is as below
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_7.jpg">
+  <figcaption><i>Fig 17. Output from Functional window applying functions</i></figcaption>
+</figure>
 
 - **timestr** is the time in string which is same as the input
 - **timedate** is the Date type field which has a corresponding Function of timeParse($timedata,'%m/%d/%Y %H:%M:%S')
@@ -325,10 +318,10 @@ with date format as '%m/%d/%Y %H:%M:%S'
 #### Points to Consider
 The output from timedatemicro above is not correct. This is because timeparse converts the date into seconds while timedatemicro expects microseconds. This you can verify by comparing the values of timedatmicronum and timedatenum fields which are same.  
 To fix the above error with timedatemicro field we need to further process the output of timeParse function. Check the output below.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_8.jpg">
+  <figcaption><i>Fig 18. Converting date time strings to Stamp data type</i></figcaption>
+</figure>
 
 - **timestr** is the time in string which is same as the input
 - **timedate** is the Date type field which has a corresponding Function of timeParse($timedata,'%m/%d/%Y %H:%M:%S')
@@ -343,18 +336,18 @@ with date format as '%m/%d/%Y %H:%M:%S'
 As seen in the above examples any value below the seconds granularity is ignored by the timeParse function as it converts the string into seconds. Below we will see an example how we can extract the part below seconds granularity from a date time string.
 
 For a model like above, the Source window output is as below
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_9.jpg">
+  <figcaption><i>Fig 19. Source window output for a date time string containing millisecond data</i></figcaption>
+</figure>
 
 - **timestr** is a string representation of the time till milliseconds. The value above represents year: 2021, month: 01, day: 05, hour: 17, minutes: 34, seconds: 22 and 980 milliseconds.
 
 The source window output acts as input to a Functional window. The Functional Window Output is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_10.jpg">
+  <figcaption><i>Fig 20. Output from Functional window</i></figcaption>
+</figure>
 
 - **timestr** is the same as the input time in string.
 - **timefield** is the corresponding ESP Stamp type. This is achieved through the following function:  
@@ -382,26 +375,26 @@ NOTE: The timeString function ignores any fraction part of seconds that one may 
 
 #### Model and Output
 Below you can find the model used for this illustration.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_11.jpg">
+  <figcaption><i>Fig 21. Model for showing Date and Stamp type conversion to date time formatted string</i></figcaption>
+</figure>
 You can find the model for reference here:
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeString.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeString.xml
 
 First the output from Source window.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_12.jpg">
+  <figcaption><i>Fig 22. Source window output to show conversion of Date Time stamp to string</i></figcaption>
+</figure>
 
 - **timenumber** is the time in Stamp format
 
 The output above acts as an Input for the next Functional Window. The output for the Functional Window is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_13.jpg">
+  <figcaption><i>Fig 23. Output from Functional window</i></figcaption>
+</figure>
 
 - **timenumber** is the field from input as it is.
 - **timedatestr** is the string representation of timenumber in the format ‘'%m/%d/%Y %H:%M:%S’
@@ -419,10 +412,10 @@ Note: You can see the fraction part is ignored by timeString.
 
 To include the microseconds part in the date time string we need to do some more processing.  
 For the same input above check the output for the Functional Window
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/4_14.jpg">
+  <figcaption><i>Fig 24. Output from Functional Window with microsecond processing</i></figcaption>
+</figure>
 
 - **timenumber** is the same as input from Source window
 - **timedatestr** is the corresponding date in seconds
@@ -442,35 +435,35 @@ For fields that are defined as a Stamp type, microsecond precision is supported.
 
 ### Model an Output
 Below you can find the model used for this illustration.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/5_1.jpg">
+  <figcaption><i>Fig 25. Model for showing Date and Stamp type conversion by connector</i></figcaption>
+</figure>
 You can find the model for reference here:
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_ConnectorTime.xml
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_ConnectorTime.xml
 
 The output from the Source window is as follows:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/5_2.jpg">
+  <figcaption><i>Fig 26. Output from Source window for time converted by file and socket connector</i></figcaption>
+</figure>
 
 - **timestr** is the string format of the date time being read from a file using file and socket connector. The microseconds are defined as the fraction part of seconds.
 - **timedate** is the Date type for the same data as timestr. The string has been converted property into seconds since epoch with the fraction part being ignored
 - **timemicro** is the Stamp type for the same data as timestr. The microseconds in the fraction part are properly converted into timestamp since epoch by the connector.
 
 You can refer to the connector properties below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/5_3.jpg">
+  <figcaption><i>Fig 27. File and socket publisher connector properties for the dateformat</i></figcaption>
+</figure>
 Notice the dateformat supplied in the connector properties.
 
 One thing to note is that a similar dateformat when supplied in a Functional Window in the timeParse function does not convert to microseconds. This is because timeParse always converts the data into seconds. You can see it below in the output of the Functional Window for the same input.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/5_4.jpg">
+  <figcaption><i>Fig 28. Output from functional window with dateformat</i></figcaption>
+</figure>
 
 - **timestr** here is the Stamp data type applied for the timestr field coming from Source window above. The function applied is  
 `timeParse($timestr,'%m/%d/%Y %H:%M:%S')`
@@ -478,10 +471,6 @@ One thing to note is that a similar dateformat when supplied in a Functional Win
 Even though the dateformat is the same the output is different because timeParse is converting the data into seconds for the timestr field which is Stamp type and expects microseconds.  
 
 The same concept will work for subscriber connector/adapters too. For the Source window above the output of the subscriber file connector is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
 
 | timestr | timedate | timemicro |
 | ------ | ------ | ------ |
@@ -490,22 +479,22 @@ The same concept will work for subscriber connector/adapters too. For the Source
 Notice that the Stamp type has been converted back into the original string while the Date type is missing the microsecond fraction which is normal as it represents data till seconds granularity.
 
 For reference the configuration of the Subscriber connector is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/5_5.jpg">
+  <figcaption><i>Fig 29. Subscriber connector properties for file and socket connector</i></figcaption>
+</figure>
 
 ## Time and time zone considerations
 In ESP all date and time data are converted to Coordinated Universal Time (UTC), no matter how time-stamped by its source. This you can easily notice by printing the current timestamp in a Functional Window.  
 You can get the models used here for your reference at:  
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_CurrentTime.xml  
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_CurrentTimeString.xml  
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_CurrentTime.xml  
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_CurrentTimeString.xml  
 
 The output from a Functional window printing the current time in microseconds is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_1.jpg">
+  <figcaption><i>Fig 30. Output from Functional window showing current Time</i></figcaption>
+</figure>
 
 - **currentTime** is of Stamp data type which uses systemMicro function to print the current timestamp. Notice the output is different from the system time being shown below. The difference is exactly the difference between UTC time and the current timezone.
 
@@ -515,24 +504,24 @@ Functional window provides two functions for conversion between the UTC times an
 This function converts the time in seconds (assuming it to be in UTC) to time in current time zone. So, it works on Date data type fields. If you have Stamp data type then you have to process the data for this.  
 
 An example for the output is below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_2.jpg">
+  <figcaption><i>Fig 31. Output from Functional window for timeGMTtoLocal function</i></figcaption>
+</figure>
 
 - **currentTime** is Date type which shows the output of function timeCurrent(). This is in UTC.
 - **currentLocalTime** is Date type which implements the following function 
 `timeGmtToLocal(timeCurrent())`  
 This gives the output in local timezone.
 
-### timeGmtString(argument1 , <argument2 >)
+### timeGmtString(argument1, argument2)
 This function converts the localtime in argument1 to GMT time and output it in the date format mentioned in argument2. Again, this also works only on seconds and having microseconds will require processing.
 
 An example of the output is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_3.jpg">
+  <figcaption><i>Fig 32. Output from Functional window for timeGmTString function</i></figcaption>
+</figure>
 
 - **currentLocalTime** is string type and gives the formatted time in my timezone. This uses the function:  
 `timeString(timeCurrent())`
@@ -544,30 +533,30 @@ Wherever using expression engine, to remain consistent with SAS Event Stream Pro
 
 #### Model and Output
 Below is the model to show the above behavior.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_4.jpg">
+  <figcaption><i>Fig 33. Model to show how Expression engine handle timezone</i></figcaption>
+</figure>
 You can get the corresponding models here:
 
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeExpFunc.xml  
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeExpFuncGMT.xml  
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeExpFunc.xml  
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeExpFuncGMT.xml  
 
 
 The output from the Compute window when a Date is added through the expression is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_5.jpg">
+  <figcaption><i>Fig 34. Output from Compute window implementing today function</i></figcaption>
+</figure>
 
 - **date** field is Date type which implements the following expression:  
 `today()`
 
 The corresponding output from Functional window is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_6.jpg">
+  <figcaption><i>Fig 35. Output from Functional window for the above input</i></figcaption>
+</figure>
 
 - **date** is Date type coming from the Compute window
 - **datefunc** is the Date type which implements the following function  
@@ -576,10 +565,10 @@ The corresponding output from Functional window is as below:
 Note the mismatch between the times. This is because today function returns the current date and time value in my current timezone whereas ESP takes the UTC timezone timestamp.
 
 The output from Functional window if Compute window expression is todaygmt() is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/6_7.jpg">
+  <figcaption><i>Fig 36. Output from Functional window with Compute window expression as todaygmt()</i></figcaption>
+</figure>
 
 - **date** is Date type coming from the Compute window which implements todaygmt() function
 - **datefunc** is the Date type which implements the following function  
@@ -592,37 +581,37 @@ While doing calculations involving dates keep in mind how each internal engine/l
 
 ### Model and Output
 The model used here for illustration is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/7_1.jpg">
+  <figcaption><i>Fig 37. Model for date based calculation example</i></figcaption>
+</figure>
 
 You can get the corresponding model for illustration here:  
-https://github.com/sassoftware/iot-how-to-handle-dates-times-ESP/tree/main/models/Project_TimeDiff.xml    
+https://gitlab.sas.com/IOT/tutorials/ESP-tutorials/how-to-handle-dates-and-times-in-sas-event-stream-processing/-/blob/master/models/Project_TimeDiff.xml    
  
 The output from Source Window is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/7_2.jpg">
+  <figcaption><i>Fig 38. Output from Source window</i></figcaption>
+</figure>
 
 - **date1** and **date2** are two Stamp type fields having the following
 
 The output from the Functional window is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/7_3.jpg">
+  <figcaption><i>Fig 39. Output from Functional window</i></figcaption>
+</figure>
 
 - **date1** and **date2** are coming from the Source window
 - **diff** is the difference between the two dates in Int64 which in a way is the difference in microseconds as Stamp types are microseconds since epoch. Diff uses the following function  
 `diff(date1-date2)`
 
 The output from the Compute window using the Expression engine is as below:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/7_4.jpg">
+  <figcaption><i>Fig 40. Output from Expression engine through Compute window</i></figcaption>
+</figure>
 
 - **date1** and **date2** are same as input event from Source window.
 - **diff** is the numeric value of the difference between date2 and date1 multiplied by number of microseconds in a day. You may notice that its not exactly correct as we have seen earlier that rounding off can cause data loss. The expression used in this case is  
@@ -631,10 +620,10 @@ The output from the Compute window using the Expression engine is as below:
 `date2-date1`
 
 The output from the Calculate window using DS2 code through MAS is as follows:
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/7_5.jpg">
+  <figcaption><i>Fig 41. Output from Calculate window through DS2 code</i></figcaption>
+</figure>
 
 - **date1** and **date2** are same as the fields in Source window.
 - **diff** is the difference between date2 and date1 as calculated in the DS2 code. The DS2 code used in this case is as follows:  
@@ -656,10 +645,10 @@ Below are some of the best practices that you can follow while working with date
 - If date time processing is required, then try to convert the date time string formats into ESP Date Time data types through the dateformat property in connectors and adapters. This way the fields will be consistent throughout the model. These fields can then be used for time based operations like Retentions in ESP.
 - As far as possible handle the date time fields through the Functional window as it directly works on the underlying numeric types, so no data conversion happens.
 - If you see any unexpected Date or Stamp formatted value in ESP Studio, then try to check the corresponding underlying numeric unformatted values. You can view that by unchecking the “Show formatted fields” option at the top right corner of the Test Result tab.
-<p align="center">
-  <img width="200" height="200" src="models/snapshots/2_1.jpg">
-  <figcaption>Figure 2 1. Model for Date and Time data types</figcaption>
-</p>
+<figure align="center">
+  <img src="models/snapshots/8_1.jpg">
+  <figcaption><i>Fig 42. Select/deselect formatted date and timestamps</i></figcaption>
+</figure>
 
 ## Conclusion
 Working with Dates and Times is a common requirement in streaming data which almost every time will have a timestamp associated with it. This document presented various scenarios that you can come across when processing streaming data containing date and time information and how to handle such type of data. 
@@ -668,5 +657,15 @@ If you have any queries, then please reach out to:
 Joydeep Bhattacharya (Joydeep.Bhattacharya@sas.com)  
 Frédéric Combaneyre(Frederic.Combaneyre@sas.com)
 
+## Contributing
 
+> We welcome your contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit contributions to this project. 
+
+## License
+
+> This project is licensed under the [Apache 2.0 License](LICENSE).
+
+## Additional Resources
+
+* [SAS Event Stream Processing 6.2 Documentation](https://go.documentation.sas.com/?cdcId=espcdc&cdcVersion=6.2&docsetId=espov&docsetTarget=home.htm&locale=en)
 
