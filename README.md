@@ -1,5 +1,7 @@
 # How to handle Dates and Times in SAS Event Stream Processing
 
+<img src="https://img.shields.io/badge/Category-Streaming%20Data-blue"> <img src="https://img.shields.io/badge/Sub--Category-Dates%20and%20Times-yellowgreen"> <img src="https://img.shields.io/badge/Difficulty-Beginner-yellow"> <img src="https://img.shields.io/badge/Updated-Mar%202021-orange">
+
 The tutorial talks about various ways of working with dates and times in ESP
 
 ## Table of Contents
